@@ -1,17 +1,14 @@
-// load all the things we need
+
+// Passport was set up following a tutorial at http://scotch.io/tutorials/javascript/easy-node-authentication-setup-and-local
+
 var LocalStrategy = require('passport-local').Strategy;
 
-// load up the user model
+// user model
 var User = require('../app/models/user');
 
-// expose this function to our app using module.exports
 module.exports = function(passport) {
 
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
+    
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -25,15 +22,11 @@ module.exports = function(passport) {
         });
     });
 
-    // =========================================================================
-    // LOCAL SIGNUP ============================================================
-    // =========================================================================
-
+    //signup
     passport.use('local-signup', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
         usernameField : 'username',
         passwordField : 'password',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
+        passReqToCallback : true // pass back entire request to the callback
     },
     function(req, username, password, done) {
 
@@ -41,27 +34,24 @@ module.exports = function(passport) {
         // User.findOne wont fire unless data is sent back
         process.nextTick(function() {
 
-	        // find a user whose email is the same as the forms email
-	        // we are checking to see if the user trying to login already exists
+	        // check if username already exists
 	        User.findOne({ 'local.username' :  username }, function(err, user) {
-	            // if there are any errors, return the error
+	            // return possible error
 	            if (err)
 	                return done(err);
 	
-	            // check to see if theres already a user with that email
 	            if (user) {
-	                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+	                return done(null, false, req.flash('signupMessage', 'That email is already taken.')); //shows a message at the login page
 	            } else {
 	
-	                // if there is no user with that email
-	                // create the user
+	                // if user doesn't exist, create it
 	                var newUser = new User();
 	
-	                // set the user's local credentials
+	                // set the user's information
 	                newUser.local.username = username;
 	                newUser.local.password = newUser.generateHash(password);
 	
-	                // save the user
+	                // save the user to the database
 	                newUser.save(function(err) {
 	                    if (err)
 	                        throw err;
@@ -72,24 +62,17 @@ module.exports = function(passport) {
         });
     }));
     
-    // =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
+    // local login
     passport.use('local-login', new LocalStrategy({
-        // by default, local strategy uses username and password, we will override with email
         usernameField : 'username',
         passwordField : 'password',
-        passReqToCallback : true // allows us to pass back the entire request to the callback
+        passReqToCallback : true // pass back entire request to the callback
     },
-    function(req, username, password, done) { // callback with email and password from our form
+    function(req, username, password, done) { // callback with username and password from our form
 
-        // find a user whose email is the same as the forms email
-        // we are checking to see if the user trying to login already exists
+        // check if username already exists
         User.findOne({ 'local.username' :  username }, function(err, user) {
-            // if there are any errors, return the error before anything else
+            // return possible errors
             if (err)
                 return done(err);
 
@@ -101,7 +84,7 @@ module.exports = function(passport) {
             if (!user.validPassword(password))
                 return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
-            // all is well, return successful user
+            // return user for successful login
             return done(null, user);
         });
     }));
