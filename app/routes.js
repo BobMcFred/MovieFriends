@@ -148,10 +148,12 @@ module.exports = function(app, passport, fs, Movie, userMovie) {
     			method: 'GET'	
     	};
     	var getRequest = http.request(options, function(response){
+    		//console.log('route');
+    		//console.log(response);
     		response.setEncoding('utf8');
     		response.on('data', function(chunk){
     			console.log(chunk);
-    			res.send(chunk);
+    			res.json(chunk);
     		});
     	});
     	getRequest.end();

@@ -42,11 +42,28 @@ $(document).ready(function(){
 	populateFeed();
 	
 	// Populate feed every 5 seconds
-	if(page=='home'){
-		window.setInterval(function(){
-			populateFeed();
-		}, 5000);
-	}
+	window.setInterval(function(){
+		populateFeed();
+	}, 5000);
+	
+	$('#divSuggest').click(function(){
+		var title = $('#txtSuggest').val();
+		$.post('/search', {title : title}).done(function(data){
+			console.log(data);
+			//alert(data.Title);
+			var movie = JSON.parse(data);
+			if(movie.Response == "False"){
+				alert(movie.Error);
+				return;
+			}
+			$.post('/addmovie', {title : movie.Title, poster: movie.Poster, suggestedBy : theUser}).done(function(data2){
+	        	if(data2.msg == 'Success'){
+	        		alert("Successfully added " + movie.Title);
+	        		populateFeed();
+	        	}
+	        });
+	    });
+	});
 	
 });
 
@@ -136,3 +153,5 @@ $(document).on('click', 'button', function(){
 		
 	}
 });
+
+
