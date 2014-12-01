@@ -2,16 +2,11 @@ var http = require('http');
 
 module.exports = function(app, passport, fs, Movie) {
 
-    // =====================================
-    // HOME PAGE (with login links) ========
-    // =====================================
+    // welcome page with login links
     app.get('/', function(req, res) {
         res.render('index.ejs'); // load the index.ejs file
     });
 
-    // =====================================
-    // LOGIN ===============================
-    // =====================================
     // show the login form
     app.get('/login', function(req, res) {
 
@@ -82,11 +77,22 @@ module.exports = function(app, passport, fs, Movie) {
         });
         
         theMovie.save(function(err, theMovie) {
-        	  if (err) return console.error(err);
+        	  if (err) res.send(err);
         	  console.dir(theMovie);
+        	  res.send({msg : 'Success'});
         });
     });
     
+    // Get list of movies
+    app.get('/allmovies', function(req, res) {
+        Movie.find(function(err, movies){
+        	if (err) res.send(err);
+        	
+        	res.send(movies);
+        });
+    });
+    
+    // Search movie using external api
     app.post('/search', function(req, res){
     	var input = req.body.title;
     	var title = input.split(' ').join('+');
