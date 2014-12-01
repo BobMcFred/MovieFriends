@@ -21,6 +21,7 @@ mongoose.connect(configDB.url); // connect to database
 var publicMovieSchema = new mongoose.Schema({
 	  title: String,
 	  poster: String,
+	  suggestedBy: String,
 	  comment: [{
 		  username : String,
 		  text : String
@@ -28,6 +29,15 @@ var publicMovieSchema = new mongoose.Schema({
 });
 
 var Movie = mongoose.model('Movie', publicMovieSchema);
+
+var userMovieSchema = new mongoose.Schema({
+	  title: String,
+	  poster: String,
+	  user: String,
+	  comment: String
+});
+
+var userMovie = mongoose.model('userMovie', userMovieSchema);
 
 require('./config/passport')(passport); // pass passport for configuration
 
@@ -46,7 +56,7 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 //routes ======================================================================
-require('./app/routes.js')(app, passport, fs, Movie); // load our routes and pass in our app and fully configured passport
+require('./app/routes.js')(app, passport, fs, Movie, userMovie); // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
 app.listen(port);

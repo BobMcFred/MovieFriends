@@ -21,8 +21,10 @@
       </div>
 
       <ul class="nav navbar-nav navbar-right">
+        <li><input type="text" class="form-control" name="suggest"></li>
+        <li><button type="button" class="btn btn-warning btn-sm">Suggest Movie</button></li>
         <li><a href="#profile"><i class="fa fa-film"></i> My Movies</a></li>
-        <li><a><i class="fa fa-user"></i> <%= user.local.username %></a></li>
+        <li><a id="theUser"><i class="fa fa-user"></i><%= user.local.username %></a></li>
         <li><a href="/logout" class="btn btn-default btn-sm">Logout</a></li>
       </ul>
     </div>

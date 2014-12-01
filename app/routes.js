@@ -1,6 +1,6 @@
 var http = require('http');
 
-module.exports = function(app, passport, fs, Movie) {
+module.exports = function(app, passport, fs, Movie, userMovie) {
 
     // welcome page with login links
     app.get('/', function(req, res) {
@@ -73,7 +73,24 @@ module.exports = function(app, passport, fs, Movie) {
     app.post('/addmovie', function(req, res) {
         var theMovie = new Movie({
         	title : req.body.title,
-        	poster : req.body.poster
+        	poster : req.body.poster,
+        	suggestedBy : req.body.suggestedBy
+        });
+        
+        theMovie.save(function(err, theMovie) {
+        	  if (err) res.send(err);
+        	  console.dir(theMovie);
+        	  res.send({msg : 'Success'});
+        });
+    });
+    
+    // Add movie to the user database
+    app.post('/addusermovie', function(req, res) {
+        var theMovie = new userMovie({
+        	title : req.body.title,
+        	poster : req.body.poster,
+        	user : req.body.user,
+        	comment : req.body.comment
         });
         
         theMovie.save(function(err, theMovie) {
@@ -89,6 +106,34 @@ module.exports = function(app, passport, fs, Movie) {
         	if (err) res.send(err);
         	
         	res.send(movies);
+        });
+    });
+    
+    // Get list of movies
+    app.post('/onemovie', function(req, res) {
+    	
+        Movie.findById(req.body.id, function(err, movies){
+        	if (err) res.send(err);
+        	
+        	res.send(movies);
+        });
+    });
+    
+    // Get list of user movies
+    app.post('/usermovies', function(req, res) {
+        userMovie.find({'user' : req.body.user}, function(err, movies){
+        	if (err) res.send(err);
+        	
+        	res.send(movies);
+        });
+    });
+    
+    // Delete user movie
+    app.delete('/deletemovie', function(req, res) {
+        userMovie.findByIdAndRemove(req.body.id, function(err, movies){
+        	if (err) res.send(err);
+        	
+        	res.send({msg : 'Success'});
         });
     });
     
