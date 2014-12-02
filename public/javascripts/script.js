@@ -113,7 +113,7 @@ function populateUserFeed(){
 		// Make rows for every entry
 		$.each(data, function(){
 			
-			feedContent = '<div class="row">' +
+			feedContent += '<div class="row">' +
 								'<div class="col-sm-4">' +
 									'<div class="well">' +
 										'<img src="' + this.poster + '" alt="' + this.title + '" class="img-rounded">' +
@@ -124,7 +124,7 @@ function populateUserFeed(){
 										'<h3>' + this.title + '</h3><button id="' + this._id + '"type="button" class="btn btn-danger btn-lg">Remove from list</button>' +
 									'</div>' +
 								'</div>' +
-							'</div>' + feedContent;
+							'</div>';
 		});
 		
 		// Put rows into the page
