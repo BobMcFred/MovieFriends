@@ -80,7 +80,7 @@ function populateFeed(){
 		// Make rows for every entry
 		$.each(data, function(){
 			
-			feedContent += '<div class="row">' +
+			feedContent = '<div class="row">' +
 								'<div class="col-sm-4">' +
 									'<div class="well">' +
 										'<img src="' + this.poster + '" alt="' + this.title + '" class="img-rounded">' +
@@ -91,7 +91,7 @@ function populateFeed(){
 										'<h3>' + this.title + '</h3><h4>Suggested by '+ this.suggestedBy +'</h4><button id="' + this._id + '"type="button" class="btn btn-warning btn-lg">Add to my list</button>' +
 									'</div>' +
 								'</div>' +
-							'</div>';
+							'</div>' + feedContent;
 		});
 		
 		// Put rows into the page
@@ -112,7 +112,7 @@ function populateUserFeed(){
 		// Make rows for every entry
 		$.each(data, function(){
 			
-			feedContent += '<div class="row">' +
+			feedContent = '<div class="row">' +
 								'<div class="col-sm-4">' +
 									'<div class="well">' +
 										'<img src="' + this.poster + '" alt="' + this.title + '" class="img-rounded">' +
@@ -123,7 +123,7 @@ function populateUserFeed(){
 										'<h3>' + this.title + '</h3><button id="' + this._id + '"type="button" class="btn btn-danger btn-lg">Remove from list</button>' +
 									'</div>' +
 								'</div>' +
-							'</div>';
+							'</div>' + feedContent;
 		});
 		
 		// Put rows into the page
