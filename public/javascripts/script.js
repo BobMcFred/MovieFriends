@@ -80,10 +80,12 @@ function populateFeed(){
 		// Make rows for every entry
 		$.each(data, function(){
 			
+			var poster = this.poster.replace("http://", "https://");
+			
 			feedContent = '<div class="row">' +
 								'<div class="col-sm-4">' +
 									'<div class="well">' +
-										'<img src="' + this.poster + '" alt="' + this.title + '" class="img-rounded">' +
+										'<img src="' + poster + '" alt="' + this.title + '" class="img-rounded">' +
 									'</div>' +
 								'</div>' +
 								'<div class="col-sm-8">' +
